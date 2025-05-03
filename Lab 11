@@ -1,0 +1,74 @@
+import csv
+
+def write_plaintext_grades():
+    """9.1: Prompt user to enter grades and write them to a plain text file."""
+    with open('grades.txt', mode='w') as grades_file:
+        while True:
+            try:
+                grade = int(input("Enter a grade (-1 to end): "))
+                if grade == -1:
+                    break
+                grades_file.write(f'{grade}\n')
+            except ValueError:
+                print("Invalid input. Please enter an integer.")
+
+def read_plaintext_grades():
+    """9.2: Read grades from a plain text file and calculate stats."""
+    total = 0
+    count = 0
+
+    try:
+        with open('grades.txt', 'r') as grades_file:
+            for line in grades_file:
+                try:
+                    grade = int(line)
+                    print(f'Grade: {grade}')
+                    total += grade
+                    count += 1
+                except ValueError:
+                    print("Invalid data found in file.")
+        
+        if count > 0:
+            average = total / count
+            print(f'\nTotal: {total}')
+            print(f'Count: {count}')
+            print(f'Average: {average:.2f}')
+        else:
+            print("No valid grades found.")
+    
+    except FileNotFoundError:
+        print("grades.txt not found.")
+
+def write_student_records_csv():
+    """9.3: Prompt user for student names and exam grades, write to CSV."""
+    with open('grades.csv', mode='w', newline='') as grades_file:
+        writer = csv.writer(grades_file)
+        while True:
+            try:
+                first = input("Enter student's first name (or 'quit' to stop): ")
+                if first.lower() == 'quit':
+                    break
+                last = input("Enter student's last name: ")
+                exam1 = int(input("Enter Exam 1 grade: "))
+                exam2 = int(input("Enter Exam 2 grade: "))
+                exam3 = int(input("Enter Exam 3 grade: "))
+                writer.writerow([first, last, exam1, exam2, exam3])
+            except ValueError:
+                print("Invalid input. Please enter valid integers for grades.")
+
+# Sample menu to run each part
+if __name__ == '__main__':
+    print("Select an option:")
+    print("1. Write grades to a plain text file")
+    print("2. Read and process grades from a plain text file")
+    print("3. Write student records to a CSV file")
+
+    choice = input("Enter 1, 2, or 3: ")
+    if choice == '1':
+        write_plaintext_grades()
+    elif choice == '2':
+        read_plaintext_grades()
+    elif choice == '3':
+        write_student_records_csv()
+    else:
+        print("Invalid choice.")
